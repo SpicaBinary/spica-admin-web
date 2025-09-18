@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { loginApi } from "./api/auth";
 
 Vue.use(Vuex);
 
@@ -21,18 +22,13 @@ export default new Vuex.Store({
   },
   // actions：处理异步逻辑（像 Java Service 层）
   actions: {
-    // 登录：这里模拟一个接口调用
-    login({ commit }, { username, password }) {
-      return new Promise((resolve, reject) => {
-        // 假装调了后端接口
-        if (username === 'admin' && password === '123456') {
-          const fakeToken = 'fake-jwt-token'
-          commit('setToken', fakeToken) // 调用 mutation 修改 state
-          resolve(fakeToken)
-        } else {
-          reject(new Error('用户名或密码错误'))
-        }
-      })
+    async login({ commit }, { username, password }) {
+      try {
+        const res = await loginApi({ username, password });
+        commit("setToken", res.token); // 后端返回的 token
+      } catch (err) {
+        throw err;
+      }
     },
     // 退出登录
     logout({ commit }) {
