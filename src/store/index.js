@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { loginApi } from "./api/auth";
+import { loginApi } from "@/api/auth";
 
 Vue.use(Vuex);
 
