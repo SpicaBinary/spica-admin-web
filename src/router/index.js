@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "@/store"; // 引入 Vuex
 
 // 引入我们要展示的页面组件（先建两个示例页面）
 import Login from "@/views/Login.vue";
@@ -37,8 +38,8 @@ router.beforeEach((to, from, next) => {
   // 判断目标路由是否需要登录
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  // 这里先写死一个假登录状态，下一步我们再用 Vuex 来判断
-  const isLoggedIn = false; // TODO: 下一步会替换成从 Vuex 读取 token
+  // 登录状态：从Vuex 获取是否有token来判断
+  const isLoggedIn = store.getters.isLoggedIn;
 
   if (requiresAuth && !isLoggedIn) {
     // 没登录想访问受保护页面，跳转到 /login
