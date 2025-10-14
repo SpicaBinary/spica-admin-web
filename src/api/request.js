@@ -2,16 +2,20 @@
 import axios from "axios";
 import store from "@/store";
 import router from "@/router";
+import config from "@/config";
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: "http://localhost:8080/api", // 后端接口的统一前缀
-  timeout: 5000, // 请求超时时间
+  // 使用环境变量配置
+  baseURL: config.baseURL,
+  // 请求超时时间
+  timeout: config.timeout || 5000,
 });
 
 // 请求拦截器：每次请求都带上 token
 service.interceptors.request.use(
   (config) => {
+    // 从Vuex 获取 token
     const token = store.state.token;
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
