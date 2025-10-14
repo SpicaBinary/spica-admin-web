@@ -25,7 +25,7 @@ export default new Vuex.Store({
     async login({ commit }, { username, password }) {
       try {
         const res = await loginApi({ username, password });
-        commit("setToken", res.token); // 后端返回的 token
+        commit("setToken", res.data); // 后端返回的 token
       } catch (err) {
         throw err;
       }
