@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { loginApi } from "@/api/auth";
+import { getUserInfo } from "@/api/user";
 
 Vue.use(Vuex);
 
@@ -8,6 +9,8 @@ export default new Vuex.Store({
   state: {
     // 全局状态：存储用户 token
     token: null,
+    // 用户信息
+    userInfo: null,
   },
   // mutations：修改state的唯一入口
   mutations: {
@@ -19,13 +22,25 @@ export default new Vuex.Store({
     clearToken(state) {
       state.token = null;
     },
+    // 设置用户信息
+    setUserInfo(state, userInfo) {
+      state.userInfo = userInfo;
+    },
+    // 清除用户信息
+    clearUserInfo(state) {
+      state.userInfo = null;
+    },
   },
   // actions：处理异步逻辑（像 Java Service 层）
   actions: {
     async login({ commit }, { username, password }) {
       try {
+        // 登录获取token
         const res = await loginApi({ username, password });
-        commit("setToken", res.data); // 后端返回的 token
+        commit("setToken", res.data);
+        // 登录成功后获取用户信息
+        const userInfo = await getUserInfo();
+        commit("setUserInfo", userInfo.data);
       } catch (err) {
         throw err;
       }
@@ -33,11 +48,26 @@ export default new Vuex.Store({
     // 退出登录
     logout({ commit }) {
       commit("clearToken");
+      commit("clearUserInfo");
     },
   },
   // getters：数据的派生计算
   getters: {
     // 获取登录状态：是否有 token
     isLoggedIn: (state) => !!state.token,
+    // 获取用户信息
+    userInfo: (state) => state.userInfo,
+    // 获取用户角色
+    roles: (state) => state.userInfo?.roles || [],
+    // 获取用户权限
+    permissions: (state) => state.userInfo?.permissions || [],
+    // 检查是否有某个权限
+    hasPermission: (state) => (permission) => {
+      return state.userInfo?.permissions?.includes(permission) || false;
+    },
+    // 检查是否有某个角色
+    hasRole: (state) => (role) => {
+      return state.userInfo?.roles?.includes(role) || false;
+    },
   },
 });

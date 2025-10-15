@@ -5,7 +5,12 @@
       <div slot="header">
         <span>欢迎信息</span>
       </div>
-      <h2>欢迎来到首页</h2>
+      <div v-if="userInfo">
+        <h2>欢迎你，{{ userInfo.username }}</h2>
+        <p>用户ID: {{ userInfo.id }}</p>
+        <p>邮箱: {{ userInfo.email || "未设置" }}</p>
+        <p>注册时间: {{ userInfo.createTime || "未知" }}</p>
+      </div>
       <p>这是登录后才能访问的页面</p>
       <!-- 使用 Element UI 的按钮组件 -->
       <el-button type="danger" @click="logout">退出登录</el-button>
@@ -16,6 +21,12 @@
 <script>
 export default {
   name: "Dashboard",
+  computed: {
+    // 从 Vuex 中获取用户信息
+    userInfo() {
+      return this.$store.getters.userInfo;
+    },
+  },
   methods: {
     logout() {
       this.$store.dispatch("logout");
