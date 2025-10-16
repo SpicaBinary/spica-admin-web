@@ -8,9 +8,14 @@ import store from "./store";
 import ElementUI from "element-ui";
 // 引入 Element UI 的样式
 import "element-ui/lib/theme-chalk/index.css";
+// 引入自定义权限指令
+import setupPermissionDirective from "@/directives/permission";
 
 // 使用 Element UI
 Vue.use(ElementUI);
+
+// 将指令注册到 Vue 实例上
+setupPermissionDirective(Vue);
 
 Vue.config.productionTip = false;
 
