@@ -5,7 +5,7 @@ import store from "@/store"; // 引入 Vuex
 // 引入我们要展示的页面组件（先建两个示例页面）
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
-
+import UserManagement from "@/views/UserManagement.vue";
 // 告诉 Vue 使用 vue-router
 Vue.use(Router);
 
@@ -21,6 +21,13 @@ const routes = [
     name: "Dashboard",
     component: Dashboard,
     meta: { requiresAuth: true }, // meta 信息，用来标记需要登录才能访问
+  },
+  // 新增用户管理路由
+  {
+    path: "/user",
+    name: "UserManagement",
+    component: UserManagement,
+    meta: { requiresAuth: true },
   },
 ];
 

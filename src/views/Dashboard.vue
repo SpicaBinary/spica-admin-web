@@ -15,7 +15,7 @@
       <!-- 权限控制 -->
       <el-button v-permission="'user:create'">创建用户</el-button>
       <!-- 角色控制 -->
-      <el-button v-role="'ADMIN'">管理员功能</el-button>
+      <el-button v-role="'ADMIN'" @click="toUseManage">管理员功能</el-button>
       <!-- 使用 Element UI 的按钮组件 -->
       <el-button type="danger" @click="logout">退出登录</el-button>
     </el-card>
@@ -35,6 +35,10 @@ export default {
     logout() {
       this.$store.dispatch("logout");
       this.$router.push("/login");
+    },
+    toUseManage() {
+      // 登录成功后跳转到首页
+      this.$router.push("/user");
     },
   },
 };
