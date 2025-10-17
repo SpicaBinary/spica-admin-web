@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
-import store from "@/store"; // 引入 Vuex
-
-// 引入我们要展示的页面组件（先建两个示例页面）
+// 引入 Vuex
+import store from "@/store";
+// 引入布局组件
+import Layout from "@/components/Layout.vue";
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import UserManagement from "@/views/UserManagement.vue";
@@ -11,23 +12,31 @@ Vue.use(Router);
 
 // 路由表：定义页面路径与对应组件
 const routes = [
+  // 登录页 - 独立页面
   {
     path: "/login",
     name: "Login",
     component: Login,
   },
+  // 主布局 - 包含公共布局的页面组
   {
-    path: "/",
-    name: "Dashboard",
-    component: Dashboard,
-    meta: { requiresAuth: true }, // meta 信息，用来标记需要登录才能访问
-  },
-  // 新增用户管理路由
-  {
-    path: "/user",
-    name: "UserManagement",
-    component: UserManagement,
-    meta: { requiresAuth: true },
+    path: "/", // 根路径
+    component: Layout, // 布局组件（包含顶边栏和侧边栏）
+    meta: { requiresAuth: true }, // 需要登录才能访问
+    children: [
+      // 嵌套路由 - 这些页面都会在 Layout 中显示
+      {
+        path: "", // 默认子路由，访问 / 时显示
+        name: "Dashboard",
+        component: Dashboard, // 这个组件会在 Layout 的 <router-view> 中显示
+      },
+      {
+        path: "user", // 访问 /user 时显示
+        name: "UserManagement",
+        component: UserManagement,
+        meta: { requiresAuth: true },
+      },
+    ],
   },
 ];
 
