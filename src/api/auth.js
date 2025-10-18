@@ -6,5 +6,6 @@ export function loginApi(data) {
     url: "/auth/login",
     method: "post",
     data,
+    showLoading: false, // 明确指定不显示全局loading
   });
 }

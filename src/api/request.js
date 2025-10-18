@@ -5,6 +5,8 @@ import router from "@/router";
 import config from "@/config";
 // 引入Element UI 库全局消息提示组件-Message
 import { Message } from "element-ui";
+// loading展示管理
+import loadingManager from "@/utils/loadingManager";
 
 // 创建 axios 实例
 const service = axios.create({
@@ -17,6 +19,10 @@ const service = axios.create({
 // 请求拦截器：每次请求都带上 token
 service.interceptors.request.use(
   (config) => {
+    // 只有在api配置中明确要求显示loading时才显示（默认显示）
+    if (config.showLoading !== false) {
+      loadingManager.show();
+    }
     // 从Vuex 获取 token
     const token = store.state.token;
     if (token) {
@@ -25,6 +31,8 @@ service.interceptors.request.use(
     return config;
   },
   (error) => {
+    // 请求失败时隐藏 loading
+    loadingManager.hide();
     return Promise.reject(error);
   }
 );
@@ -32,6 +40,10 @@ service.interceptors.request.use(
 // 响应拦截器：统一处理错误
 service.interceptors.response.use(
   (response) => {
+    // 只有在配置中明确要求显示loading时才隐藏
+    if (response.config && response.config.showLoading !== false) {
+      loadingManager.hide();
+    }
     // 读取接口响应结构数据
     const { code, message } = response.data;
     if (code == 200) {
@@ -47,6 +59,8 @@ service.interceptors.response.use(
   },
   // HTTP 请求本身失败(非2xx)进入错误处理
   (error) => {
+    // 请求失败时隐藏 loading
+    loadingManager.hide();
     let message = error.message;
 
     if (error.response) {

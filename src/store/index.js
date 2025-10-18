@@ -11,6 +11,8 @@ export default new Vuex.Store({
     token: null,
     // 用户信息
     userInfo: null,
+    // 全局loading信息，用于调用接口时显示 loading
+    loading: false,
   },
   // mutations：修改state的唯一入口
   mutations: {
@@ -29,6 +31,10 @@ export default new Vuex.Store({
     // 清除用户信息
     clearUserInfo(state) {
       state.userInfo = null;
+    },
+    // 控制 loading 显示开关
+    setLoading(state, flag) {
+      state.loading = flag;
     },
   },
   // actions：处理异步逻辑（像 Java Service 层）
@@ -69,5 +75,7 @@ export default new Vuex.Store({
     hasRole: (state) => (role) => {
       return state.userInfo?.roles?.includes(role) || false;
     },
+    // 页面loading状态
+    isLoading: (state) => state.loading,
   },
 });

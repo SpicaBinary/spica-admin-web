@@ -5,6 +5,7 @@ export function getUserInfo() {
   return request({
     url: "/user/getUserInfo",
     method: "get",
+    showLoading: false,
   });
 }
 
