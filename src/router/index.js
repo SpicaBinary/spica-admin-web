@@ -7,6 +7,8 @@ import Layout from "@/components/Layout.vue";
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import UserManagement from "@/views/UserManagement.vue";
+import OrderManagement from "@/views/OrderManagement.vue";
+
 // 告诉 Vue 使用 vue-router
 Vue.use(Router);
 
@@ -34,6 +36,12 @@ const routes = [
         path: "user", // 访问 /user 时显示
         name: "UserManagement",
         component: UserManagement,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "order", // 访问 /order 时显示
+        name: "OrderManagement",
+        component: OrderManagement,
         meta: { requiresAuth: true },
       },
     ],
