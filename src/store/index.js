@@ -5,12 +5,16 @@ import { getUserInfo } from "@/api/user";
 
 Vue.use(Vuex);
 
+// 页面刷新时从 localStorage 里恢复用户状态
+const savedToken = localStorage.getItem("token");
+const savedUserInfo = localStorage.getItem("userInfo");
+
 export default new Vuex.Store({
   state: {
     // 全局状态：存储用户 token
-    token: null,
+    token: savedToken || null,
     // 用户信息
-    userInfo: null,
+    userInfo: savedUserInfo ? JSON.parse(savedUserInfo) : null,
     // 全局loading信息，用于调用接口时显示 loading
     loading: false,
   },
@@ -19,18 +23,22 @@ export default new Vuex.Store({
     // 设置 token（登录时调用）
     setToken(state, token) {
       state.token = token;
+      localStorage.setItem("token", token);
     },
     // 清除 token（退出时调用）
     clearToken(state) {
       state.token = null;
+      localStorage.removeItem("token");
     },
     // 设置用户信息
     setUserInfo(state, userInfo) {
       state.userInfo = userInfo;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     },
     // 清除用户信息
     clearUserInfo(state) {
       state.userInfo = null;
+      localStorage.removeItem("userInfo");
     },
     // 控制 loading 显示开关
     setLoading(state, flag) {
