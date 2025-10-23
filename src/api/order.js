@@ -6,6 +6,7 @@ export function getOrderPage(params) {
     url: "/order/page",
     method: "get",
     params,
+    showLoading: false,
   });
 }
 

@@ -307,10 +307,10 @@ export default {
 
 <style scoped>
 .order-management {
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .search-form {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 </style>

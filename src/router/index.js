@@ -6,6 +6,7 @@ import store from "@/store";
 import Layout from "@/components/Layout.vue";
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
+import Profile from "@/views/Profile.vue";
 import UserManagement from "@/views/UserManagement.vue";
 import OrderManagement from "@/views/OrderManagement.vue";
 
@@ -31,6 +32,12 @@ const routes = [
         path: "", // 默认子路由，访问 / 时显示
         name: "Dashboard",
         component: Dashboard, // 这个组件会在 Layout 的 <router-view> 中显示
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
+        meta: { requiresAuth: true },
       },
       {
         path: "user", // 访问 /user 时显示

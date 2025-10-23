@@ -30,6 +30,11 @@
           <i class="el-icon-s-order"></i>
           <span slot="title">订单管理</span>
         </el-menu-item>
+
+        <el-menu-item index="/profile">
+          <i class="el-icon-user"></i>
+          <span slot="title">个人中心</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 

@@ -46,11 +46,11 @@ export default {
 
 <style scoped>
 .dashboard {
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .welcome-card {
-  width: 500px;
-  margin: 50px auto;
+  /* width: 500px;
+  margin: 50px auto; */
 }
 </style>

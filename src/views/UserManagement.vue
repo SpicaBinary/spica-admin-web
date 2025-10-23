@@ -39,6 +39,7 @@
           prop="createTime"
           label="创建时间"
           width="180"
+          :formatter="formatDateTime"
         ></el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
@@ -54,6 +55,7 @@
               size="mini"
               type="danger"
               @click="deleteUser(scope.row)"
+              :disabled="scope.row.username === 'admin'"
             >
               删除
             </el-button>
@@ -103,7 +105,7 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/user";
+import { createUser, deleteUser, getUserList, updateUser } from "@/api/user";
 
 export default {
   name: "UserManagement",
@@ -138,7 +140,20 @@ export default {
         email: [
           { type: "email", message: "请输入正确的邮箱地址", trigger: "blur" },
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [
+          {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+            validator: (rule, value, callback) => {
+              if (!this.isEdit && !value) {
+                callback(new Error("请输入密码"));
+              } else {
+                callback();
+              }
+            },
+          },
+        ],
       },
     };
   },
@@ -154,7 +169,7 @@ export default {
         const params = {
           current: this.pagination.currentPage,
           size: this.pagination.pageSize,
-          username: this.searchForm.username,
+          username: this.searchForm.username || undefined, // 如果为空字符串则不传递该参数
         };
 
         const response = await getUserList(params);
@@ -213,17 +228,34 @@ export default {
       this.dialogTitle = "编辑用户";
       this.isEdit = true;
       this.userForm = { ...user };
+      // 清空密码字段，编辑时不需要输入密码
+      this.userForm.password = "";
       this.dialogVisible = true;
     },
 
     // 保存用户
     saveUser() {
-      this.$refs.userForm.validate((valid) => {
+      this.$refs.userForm.validate(async (valid) => {
         if (valid) {
-          // 这里应该调用API保存用户
-          this.$message.success(this.isEdit ? "用户更新成功" : "用户创建成功");
-          this.dialogVisible = false;
-          this.fetchUserList();
+          try {
+            if (this.isEdit) {
+              // 更新用户
+              await updateUser(this.userForm.id, this.userForm);
+              this.$message.success("用户更新成功");
+            } else {
+              // 创建用户
+              await createUser(this.userForm);
+              this.$message.success("用户创建成功");
+            }
+            this.dialogVisible = false;
+            this.fetchUserList();
+          } catch (error) {
+            this.$message.error(
+              (this.isEdit ? "更新" : "创建") +
+                "用户失败: " +
+                (error.message || "")
+            );
+          }
         }
       });
     },
@@ -235,14 +267,31 @@ export default {
         cancelButtonText: "取消",
         type: "warning",
       })
-        .then(() => {
-          // 这里应该调用API删除用户
-          this.$message.success("删除成功");
-          this.fetchUserList();
+        .then(async () => {
+          try {
+            await deleteUser(user.id);
+            this.$message.success("删除成功");
+            this.fetchUserList();
+          } catch (error) {
+            this.$message.error("删除失败: " + (error.message || ""));
+          }
         })
         .catch(() => {
           // 取消删除
         });
+    },
+    // 格式化日期时间
+    formatDateTime(row, column, cellValue) {
+      if (!cellValue) return "";
+      // 假设后端返回的是标准时间格式
+      const date = new Date(cellValue);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
   },
 };
@@ -250,10 +299,10 @@ export default {
 
 <style scoped>
 .user-management {
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .search-form {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 </style>

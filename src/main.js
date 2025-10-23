@@ -8,6 +8,8 @@ import store from "./store";
 import ElementUI from "element-ui";
 // 引入 Element UI 的样式
 import "element-ui/lib/theme-chalk/index.css";
+// Element UI 的样式之后可以再次引入自定义样式，对默认的Element UI 的样式覆盖
+//import xxxx.css
 // 引入自定义权限指令
 import setupPermissionDirective from "@/directives/permission";
 
