@@ -9,6 +9,15 @@ export function getUserInfo() {
   });
 }
 
+// 当前用户菜单信息
+export function getCurrentUserMenus() {
+  return request({
+    url: "/user/menus",
+    method: "get",
+    showLoading: false,
+  });
+}
+
 // 获取所有用户信息
 export function getUserList(params) {
   return request({

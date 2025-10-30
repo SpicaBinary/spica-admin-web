@@ -4,7 +4,6 @@
       <div slot="header">
         <span>订单管理</span>
         <el-button
-          v-permission="'order:create'"
           type="primary"
           size="small"
           @click="showCreateDialog"

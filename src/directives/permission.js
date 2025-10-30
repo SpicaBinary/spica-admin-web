@@ -32,7 +32,14 @@ function checkPermission(el, binding) {
     const hasPermission = store.getters.hasPermission(value);
 
     // 使用 display 控制隐藏指令修饰el
-    el.style.display = hasPermission ? "" : "none";
+    // el.style.display = hasPermission ? "" : "none";
+    if (!hasPermission) {
+      // 从 DOM 中直接移除
+      // el.parentNode && el.parentNode.removeChild(el);
+      if (!hasRole) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
+    }
   }
 }
 
@@ -42,13 +49,17 @@ function checkRole(el, binding) {
 
   if (value) {
     const hasRole = store.getters.hasRole(value);
-    el.style.display = hasRole ? "" : "none";
+    // el.style.display = hasRole ? "" : "none";
+    // el.parentNode && el.parentNode.removeChild(el);
+    if (!hasRole) {
+      el.parentNode && el.parentNode.removeChild(el);
+    }
   }
 }
 
 // 传入vue，然后注册自定义指令（Vue2）
 export default function setupPermissionDirective(Vue) {
-  // 添加全局指令v-permission
+  // 添加全局指令v-permission：细粒度控制权限,功能级别控制
   Vue.directive("permission", permission);
   // 添加全局指令v-role
   Vue.directive("role", role);
