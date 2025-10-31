@@ -1,4 +1,4 @@
-import { loginApi } from "@/api/auth";
+import { loginApi, logoutApi } from "@/api/auth";
 import { getCurrentUserMenus, getUserInfo } from "@/api/user";
 import Vue from "vue";
 import Vuex from "vuex";
@@ -90,11 +90,19 @@ export default new Vuex.Store({
       }
     },
     // 退出登录
-    logout({ commit }) {
-      commit("clearToken");
-      commit("clearUserInfo");
-      commit("clearUserMenus");
-      commit("clearUserPermissions");
+    async logout({ commit }) {
+      try {
+        commit("setLoading", true);
+        await logoutApi();
+      } catch (error) {
+        console.error("Logout API error:", error);
+      } finally {
+        commit("clearToken");
+        commit("clearUserInfo");
+        commit("clearUserMenus");
+        commit("clearUserPermissions");
+        commit("setLoading", false);
+      }
     },
   },
   // getters：数据的派生计算

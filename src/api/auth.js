@@ -9,3 +9,11 @@ export function loginApi(data) {
     showLoading: false, // 明确指定不显示全局loading
   });
 }
+// 退出接口
+export function logoutApi() {
+  return request({
+    url: "/auth/logout",
+    method: "post",
+    showLoading: false,
+  });
+}
