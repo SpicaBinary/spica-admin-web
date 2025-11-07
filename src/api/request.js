@@ -1,8 +1,8 @@
 // axios 封装
-import axios from "axios";
-import store from "@/store";
-import router from "@/router";
 import config from "@/config";
+import router from "@/router";
+import store from "@/store";
+import axios from "axios";
 // 引入Element UI 库全局消息提示组件-Message
 import { Message } from "element-ui";
 // loading展示管理
@@ -72,8 +72,8 @@ service.interceptors.response.use(
             type: "error",
             duration: 3000,
           });
-          // 调用Vuex的logout action
-          store.dispatch("logout");
+          // 调用Vuex的logout action,清除本地存储的token和用户信息
+          store.dispatch("logout", true);
           // 跳转到登录页面
           router.push("/login");
           break;

@@ -36,9 +36,7 @@ function checkPermission(el, binding) {
     if (!hasPermission) {
       // 从 DOM 中直接移除
       // el.parentNode && el.parentNode.removeChild(el);
-      if (!hasRole) {
-        el.parentNode && el.parentNode.removeChild(el);
-      }
+      el.parentNode && el.parentNode.removeChild(el);
     }
   }
 }

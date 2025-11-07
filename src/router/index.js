@@ -4,11 +4,13 @@ import Router from "vue-router";
 import store from "@/store";
 // 引入布局组件
 import Layout from "@/components/Layout.vue";
-import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
-import Profile from "@/views/Profile.vue";
-import UserManagement from "@/views/UserManagement.vue";
+import Login from "@/views/Login.vue";
+import MenuManagement from "@/views/MenuManagement.vue";
 import OrderManagement from "@/views/OrderManagement.vue";
+import Profile from "@/views/Profile.vue";
+import RoleMenuManage from "@/views/RoleMenuManage.vue";
+import UserManagement from "@/views/UserManagement.vue";
 
 // 告诉 Vue 使用 vue-router
 Vue.use(Router);
@@ -40,15 +42,34 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "user", // 访问 /user 时显示
+        path: "order",
+        name: "OrderManagement",
+        component: OrderManagement,
+        meta: { requiresAuth: true },
+      },
+      // 系统管理模块
+      {
+        path: "system/user",
         name: "UserManagement",
         component: UserManagement,
         meta: { requiresAuth: true },
       },
       {
-        path: "order", // 访问 /order 时显示
-        name: "OrderManagement",
-        component: OrderManagement,
+        path: "system/role-menu",
+        name: "RoleMenuManage",
+        component: RoleMenuManage,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "system/menu",
+        name: "MenuManagement",
+        component: MenuManagement,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "system/profile",
+        name: "profile",
+        component: Profile,
         meta: { requiresAuth: true },
       },
     ],

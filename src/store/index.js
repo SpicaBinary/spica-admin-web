@@ -90,10 +90,13 @@ export default new Vuex.Store({
       }
     },
     // 退出登录
-    async logout({ commit }) {
+    async logout({ commit }, skipApiCall = false) {
       try {
         commit("setLoading", true);
-        await logoutApi();
+        // 只有在主动触发 logout 时才调用 API
+        if (!skipApiCall) {
+          await logoutApi();
+        }
       } catch (error) {
         console.error("Logout API error:", error);
       } finally {
