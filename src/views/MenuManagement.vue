@@ -143,6 +143,136 @@
               />
             </el-form-item>
 
+            <!-- 权限管理区块 -->
+            <el-divider>功能权限管理</el-divider>
+
+            <el-table
+              v-if="permissionList.length"
+              :data="permissionList"
+              style="width: 100%; margin-bottom: 20px"
+            >
+              <el-table-column
+                prop="permissionName"
+                label="权限名称"
+                width="160"
+              />
+              <el-table-column prop="permissionCode" label="权限标识" />
+              <el-table-column prop="type" label="类型" width="120">
+                <template slot-scope="{ row }">
+                  <el-tag v-if="row.type === 1">{{ "按钮" }}</el-tag>
+                  <el-tag v-if="row.type === 2" type="warning">{{
+                    "接口"
+                  }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="status" label="状态" width="100">
+                <template slot-scope="{ row }">
+                  <el-tag :type="row.status === 1 ? 'success' : 'danger'">
+                    {{ row.status === 1 ? "启用" : "禁用" }}
+                  </el-tag>
+                </template>
+              </el-table-column>
+
+              <!-- 在权限表格中添加操作列 -->
+              <el-table-column label="操作" width="150">
+                <template slot-scope="{ row }">
+                  <el-button size="mini" @click="editPermission(row)"
+                    >编辑</el-button
+                  >
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    @click="deletePermission(row)"
+                    >删除</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <el-empty v-else description="暂无权限项"></el-empty>
+
+            <el-button
+              v-if="menuForm?.id"
+              size="mini"
+              type="primary"
+              @click="showPermissionDialog()"
+            >
+              新增权限
+            </el-button>
+
+            <!-- 权限弹窗 -->
+            <el-dialog
+              :visible.sync="permDialogVisible"
+              :title="editingPermission ? '编辑权限' : '新增权限'"
+              width="550px"
+            >
+              <el-form
+                ref="permissionForm"
+                :model="permissionForm"
+                :rules="permissionRules"
+                label-width="100px"
+              >
+                <el-form-item label="权限名称" prop="permissionName">
+                  <el-input
+                    v-model="permissionForm.permissionName"
+                    placeholder="请输入权限名称"
+                  />
+                </el-form-item>
+
+                <el-form-item label="权限标识" prop="permissionCode">
+                  <el-input
+                    v-model="permissionForm.permissionCode"
+                    placeholder="如：btn:user:add"
+                  />
+                </el-form-item>
+
+                <el-form-item label="权限类型" prop="type">
+                  <el-radio-group v-model="permissionForm.type">
+                    <el-radio :label="1">页面按钮</el-radio>
+                    <el-radio :label="2">接口权限</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+
+                <!-- 接口类型时才显示 -->
+                <template v-if="permissionForm.type === 2">
+                  <el-form-item label="接口URL" prop="url">
+                    <el-input
+                      v-model="permissionForm.url"
+                      placeholder="如：/api/user/list"
+                    />
+                  </el-form-item>
+                  <el-form-item label="请求方法" prop="method">
+                    <el-select
+                      v-model="permissionForm.method"
+                      placeholder="选择HTTP方法"
+                    >
+                      <el-option label="GET" value="GET" />
+                      <el-option label="POST" value="POST" />
+                      <el-option label="PUT" value="PUT" />
+                      <el-option label="DELETE" value="DELETE" />
+                    </el-select>
+                  </el-form-item>
+                </template>
+
+                <el-form-item label="状态" prop="status">
+                  <el-switch
+                    v-model="permissionForm.status"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-text="启用"
+                    inactive-text="禁用"
+                  />
+                </el-form-item>
+              </el-form>
+
+              <div slot="footer">
+                <el-button @click="permDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="savePermission"
+                  >保 存</el-button
+                >
+              </div>
+            </el-dialog>
+
             <div style="margin-top: 20px; text-align: right">
               <el-button @click="resetForm">重 置</el-button>
               <el-button
@@ -179,6 +309,10 @@ import {
   updateMenu,
   getMenuById,
   getAllMenus,
+  getPermissionsByMenuId,
+  createPermission,
+  updatePermission,
+  deletePermission,
 } from "@/api/user";
 
 export default {
@@ -197,6 +331,30 @@ export default {
           { required: true, message: "请输入权限标识", trigger: "blur" },
         ],
         path: [{ required: true, message: "请输入路由地址", trigger: "blur" }],
+      },
+      permissionRules: {
+        permissionName: [
+          { required: true, message: "请输入权限名称", trigger: "blur" },
+        ],
+        permissionCode: [
+          { required: true, message: "请输入权限标识", trigger: "blur" },
+        ],
+        type: [
+          { required: true, message: "请选择权限类型", trigger: "change" },
+        ],
+      },
+      permissionList: [], // 当前菜单下的权限
+      permDialogVisible: false,
+      editingPermission: null,
+      permissionForm: {
+        id: null,
+        permissionName: "",
+        permissionCode: "",
+        type: 1,
+        url: "",
+        method: "",
+        status: 1,
+        menuId: null,
       },
     };
   },
@@ -234,6 +392,8 @@ export default {
         const res = await getMenuById(node.id);
         this.menuForm = { ...res.data };
         this.isEdit = true;
+        // 加载对应菜单的权限列表
+        await this.fetchPermissions(node.id);
       } catch (err) {
         this.$message.error("加载菜单详情失败");
       }
@@ -250,6 +410,7 @@ export default {
         icon: "",
         sortOrder: 0,
         status: 1,
+        menuId: this.menuForm.id,
       };
       this.isEdit = false;
     },
@@ -295,6 +456,71 @@ export default {
           ? icon
           : `el-icon-${icon}`
         : "el-icon-menu";
+    },
+    async fetchPermissions(menuId) {
+      const res = await getPermissionsByMenuId(menuId);
+      this.permissionList = res.data || [];
+    },
+
+    showPermissionDialog() {
+      this.editingPermission = null;
+      this.permissionForm = {
+        id: null,
+        permissionName: "",
+        permissionCode: "",
+        type: 1,
+        url: "",
+        method: "",
+        status: 1,
+        menuId: null,
+      };
+      this.permDialogVisible = true;
+    },
+
+    editPermission(row) {
+      this.editingPermission = row;
+      this.permissionForm = { ...row };
+      this.permDialogVisible = true;
+    },
+
+    async savePermission() {
+      // 使用表单验证
+      this.$refs.permissionForm.validate(async (valid) => {
+        if (!valid) return;
+
+        const payload = { ...this.permissionForm, menuId: this.menuForm.id };
+        try {
+          if (this.editingPermission) {
+            await updatePermission(payload.id, payload);
+            this.$message.success("更新成功");
+          } else {
+            await createPermission(payload);
+            this.$message.success("新增成功");
+          }
+          this.permDialogVisible = false;
+          this.fetchPermissions(this.menuForm.id);
+        } catch (err) {
+          this.$message.error("保存失败");
+        }
+      });
+    },
+
+    async deletePermission(row) {
+      try {
+        // 修复确认提示中的字段名错误
+        await this.$confirm(
+          `确定删除权限「${row.permissionName}」吗？`,
+          "提示",
+          {
+            type: "warning",
+          }
+        );
+        await deletePermission(row.id);
+        this.$message.success("删除成功");
+        this.fetchPermissions(this.menuForm.id);
+      } catch (err) {
+        // ignore
+      }
     },
   },
 };

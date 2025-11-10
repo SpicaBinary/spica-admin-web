@@ -122,58 +122,33 @@ export function getMenuById(id) {
   });
 }
 
-// 为角色分配菜单（单个）
-export function assignMenuToRole(roleId, menuId) {
+export function getPermissionsByMenuId(menuId) {
   return request({
-    url: "/user/role-menu",
-    method: "post",
-    params: {
-      roleId,
-      menuId,
-    },
-  });
-}
-
-// 为角色批量分配菜单
-export function assignMenusToRole(roleId, menuIds) {
-  return request({
-    url: "/user/role-menu/batch",
-    method: "post",
-    params: {
-      roleId,
-    },
-    data: menuIds,
-  });
-}
-
-// 移除角色的菜单（单个）
-export function removeMenuFromRole(roleId, menuId) {
-  return request({
-    url: "/user/role-menu",
-    method: "delete",
-    params: {
-      roleId,
-      menuId,
-    },
-  });
-}
-
-// 批量移除角色的菜单
-export function removeMenusFromRole(roleId, menuIds) {
-  return request({
-    url: "/user/role-menu/batch",
-    method: "delete",
-    params: {
-      roleId,
-    },
-    data: menuIds,
-  });
-}
-
-// 获取角色已分配的菜单ID列表
-export function getRoleMenuIds(roleId) {
-  return request({
-    url: `/user/role-menu/role/${roleId}`,
+    url: `/user/permissions`,
     method: "get",
+    params: { menuId },
+  });
+}
+
+export function createPermission(data) {
+  return request({
+    url: `/user/permissions`,
+    method: "post",
+    data,
+  });
+}
+
+export function updatePermission(id, data) {
+  return request({
+    url: `/user/permissions/${id}`,
+    method: "put",
+    data,
+  });
+}
+
+export function deletePermission(id) {
+  return request({
+    url: `/user/permissions/${id}`,
+    method: "delete",
   });
 }
