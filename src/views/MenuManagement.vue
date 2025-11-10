@@ -410,9 +410,10 @@ export default {
         icon: "",
         sortOrder: 0,
         status: 1,
-        menuId: this.menuForm.id,
+        menuId: null,
       };
       this.isEdit = false;
+      this.permissionList = []; // 同时清空权限列表
     },
     saveMenu() {
       this.$refs.menuForm.validate(async (valid) => {
@@ -423,7 +424,10 @@ export default {
             await updateMenu(formData.id, formData);
             this.$message.success("更新成功");
           } else {
-            await createMenu(formData);
+            const response = await createMenu(formData);
+            // 创建成功后设置当前菜单ID并清空权限列表
+            this.menuForm.id = response.data.id;
+            this.permissionList = [];
             this.$message.success("创建成功");
           }
           this.fetchMenuTree();
