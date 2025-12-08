@@ -11,6 +11,7 @@ import OrderManagement from "@/views/OrderManagement.vue";
 import Profile from "@/views/Profile.vue";
 import RoleMenuManage from "@/views/RoleMenuManage.vue";
 import UserManagement from "@/views/UserManagement.vue";
+import PermissionsAssign from "@/views/PermissionsAssign.vue";
 
 // 告诉 Vue 使用 vue-router
 Vue.use(Router);
@@ -55,12 +56,6 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "system/role-menu",
-        name: "RoleMenuManage",
-        component: RoleMenuManage,
-        meta: { requiresAuth: true },
-      },
-      {
         path: "system/menu",
         name: "MenuManagement",
         component: MenuManagement,
@@ -70,6 +65,12 @@ const routes = [
         path: "system/profile",
         name: "profile",
         component: Profile,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "system/permissionsAssign",
+        name: "permissionsAssign",
+        component: PermissionsAssign,
         meta: { requiresAuth: true },
       },
     ],

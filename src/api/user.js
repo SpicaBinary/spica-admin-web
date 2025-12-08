@@ -121,15 +121,44 @@ export function getMenuById(id) {
     method: "get",
   });
 }
-
-export function getPermissionsByMenuId(menuId) {
+// 获取所有Role角色
+export function getAllRoles() {
   return request({
-    url: `/user/permissions`,
+    url: `/user/role`,
     method: "get",
-    params: { menuId },
   });
 }
-
+// 获取所有的Menu-Permission树形结构
+export function getAllMenuPermissionTree() {
+  return request({
+    url: `/user/permissions/getAllMenuPermissionTree`,
+    method: "get",
+  });
+}
+// 获取指定用户的PermissionKey
+export function getRolePermissionKeys(roleId) {
+  return request({
+    url: `/user/permissions/current/ids`,
+    method: "get",
+    params: { roleId },
+  });
+}
+// 分配权限
+export function assignRolePermissions(data) {
+  return request({
+    url: `/user/permissions/assignRolePermissions`,
+    method: "post",
+    data,
+  });
+}
+// 获取对应菜单权限信息
+export function getPermissionsByMenuId(menuId) {
+  return request({
+    url: `/user/permissions/${menuId}`,
+    method: "get",
+  });
+}
+// 创建Permission
 export function createPermission(data) {
   return request({
     url: `/user/permissions`,
@@ -137,7 +166,7 @@ export function createPermission(data) {
     data,
   });
 }
-
+// 更新Permission
 export function updatePermission(id, data) {
   return request({
     url: `/user/permissions/${id}`,
@@ -145,7 +174,7 @@ export function updatePermission(id, data) {
     data,
   });
 }
-
+// 删除Permission
 export function deletePermission(id) {
   return request({
     url: `/user/permissions/${id}`,
