@@ -117,7 +117,7 @@ export default new Vuex.Store({
     // 获取用户角色
     roles: (state) => state.userInfo?.roles || [],
     // 获取用户权限
-    permissions: (state) => state.userInfo?.permissions || [],
+    permissions: (state) => state.userPermissions || [],
     // 检查是否有某个权限
     hasPermission: (state) => (permission) => {
       return state.userPermissions?.includes(permission) || false;

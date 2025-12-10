@@ -57,7 +57,7 @@ export function getUserById(id) {
 // 创建用户
 export function createUser(data) {
   return request({
-    url: "/user/add",
+    url: "/user",
     method: "post",
     data,
   });

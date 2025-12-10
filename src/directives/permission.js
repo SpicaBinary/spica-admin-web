@@ -27,16 +27,15 @@ export const role = {
 // 权限检查函数
 function checkPermission(el, binding) {
   const { value } = binding;
-
+  console.log("权限检查" + value);
   if (value) {
     const hasPermission = store.getters.hasPermission(value);
-
-    // 使用 display 控制隐藏指令修饰el
-    // el.style.display = hasPermission ? "" : "none";
+    console.log("权限检查结果：" + hasPermission);
     if (!hasPermission) {
+      // 使用 display 控制隐藏指令修饰el
+      el.style.display = hasPermission ? "" : "none";
       // 从 DOM 中直接移除
       // el.parentNode && el.parentNode.removeChild(el);
-      el.parentNode && el.parentNode.removeChild(el);
     }
   }
 }
@@ -48,9 +47,11 @@ function checkRole(el, binding) {
   if (value) {
     const hasRole = store.getters.hasRole(value);
     // el.style.display = hasRole ? "" : "none";
-    // el.parentNode && el.parentNode.removeChild(el);
     if (!hasRole) {
-      el.parentNode && el.parentNode.removeChild(el);
+      // 使用 display 控制隐藏指令修饰el
+      el.style.display = hasPermission ? "" : "none";
+      // 从 DOM 中直接移除
+      // el.parentNode && el.parentNode.removeChild(el);
     }
   }
 }

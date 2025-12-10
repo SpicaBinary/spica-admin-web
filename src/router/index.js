@@ -9,7 +9,6 @@ import Login from "@/views/Login.vue";
 import MenuManagement from "@/views/MenuManagement.vue";
 import OrderManagement from "@/views/OrderManagement.vue";
 import Profile from "@/views/Profile.vue";
-import RoleMenuManage from "@/views/RoleMenuManage.vue";
 import UserManagement from "@/views/UserManagement.vue";
 import PermissionsAssign from "@/views/PermissionsAssign.vue";
 
