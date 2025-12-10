@@ -49,12 +49,25 @@ service.interceptors.response.use(
     if (code == 200) {
       return response.data;
     } else {
-      Message({
-        message: message || "请求失败",
-        type: "error",
-        duration: 3000,
-      });
-      return Promise.reject(new Error(message || "请求失败"));
+      // 对特定错误码进行个性化处理
+      switch (code) {
+        case "500":
+          Message({
+            message: message || "服务器内部错误",
+            type: "warning",
+            duration: 5000,
+            showClose: true,
+          });
+          break;
+        default:
+          Message({
+            message: message || "请求失败",
+            type: "error",
+            duration: 3000,
+          });
+      }
+      // 返回一个resolved promise而不是rejected，避免控制台报错
+      return Promise.resolve({ code, message, data: response.data.data || [] });
     }
   },
   // HTTP 请求本身失败(非2xx)进入错误处理

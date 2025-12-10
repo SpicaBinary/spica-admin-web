@@ -44,7 +44,10 @@
         />
 
         <div style="margin-top: 10px; text-align: right; padding-bottom: 5px">
-          <el-button type="primary" @click="saveRolePermissions"
+          <el-button
+            type="primary"
+            @click="saveRolePermissions"
+            v-permission="'btn:permission:assign'"
             >保存</el-button
           >
         </div>
@@ -117,10 +120,21 @@ export default {
       const res = await getAllMenuPermissionTree();
       // 构建权限树唯一的id
       this.permissionTree = this.transformTree(res.data);
-      // 展开节点
-      this.expandedKeys = this.permissionTree.map((item) => `menu-${item.id}`);
+      // 展开节点：递归收集所有非叶子节点的 key
+      this.expandedKeys = this.collectExpandedKeys(this.permissionTree);
     },
-
+    //递归收集需要展开的 key
+    collectExpandedKeys(tree) {
+      let keys = [];
+      tree.forEach((node) => {
+        // 仅收集菜单或目录的 key，而不是按钮的 key
+        if (node.children && node.children.length > 0) {
+          keys.push(node.key);
+          keys = keys.concat(this.collectExpandedKeys(node.children));
+        }
+      });
+      return keys;
+    },
     // ============ 加载角色现有权限（回显） =============
     async loadRolePermissions() {
       if (this.loadingPermissions) {
@@ -162,7 +176,10 @@ export default {
     // 拼接权限id，使用type-id的形式保证唯一性
     transformTree(tree) {
       return tree.map((node) => {
-        node.key = `${node.type}-${node.id}`; // 生成唯一 key
+        // 展示名字
+        node.label = `[${node.type}]-${node.label || node.name || ""}`;
+        // 生成唯一 key
+        node.key = `${node.type}-${node.id}`;
         console.log(node.key);
         if (node.children && node.children.length > 0) {
           node.children = this.transformTree(node.children);

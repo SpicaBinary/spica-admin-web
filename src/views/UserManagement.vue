@@ -4,7 +4,7 @@
       <div slot="header">
         <span>用户管理</span>
         <el-button
-          v-permission="'btn:user:system:profile:user:create'"
+          v-permission="'btn:user:create'"
           type="primary"
           size="small"
           @click="showCreateDialog"
@@ -23,7 +23,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="searchUsers">搜索</el-button>
+          <el-button
+            type="primary"
+            v-permission="'btn:user:list'"
+            @click="searchUsers"
+            >搜索</el-button
+          >
           <el-button @click="resetSearch">重置</el-button>
         </el-form-item>
       </el-form>
@@ -49,14 +54,14 @@
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
-              v-permission="'btn:user:system:profile:update'"
+              v-permission="'btn:user:update'"
               size="mini"
               @click="editUser(scope.row)"
             >
               编辑
             </el-button>
             <el-button
-              v-permission="'btn:user:system:profile:delete'"
+              v-permission="'btn:user:delete'"
               size="mini"
               type="danger"
               @click="deleteUser(scope.row)"
