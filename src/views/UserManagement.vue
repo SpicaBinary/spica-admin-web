@@ -4,7 +4,7 @@
       <div slot="header">
         <span>用户管理</span>
         <el-button
-          v-permission="'user:create'"
+          v-permission="'btn:user:system:profile:user:create'"
           type="primary"
           size="small"
           @click="showCreateDialog"
@@ -35,6 +35,11 @@
         <el-table-column prop="nickname" label="昵称"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>
+        <el-table-column prop="roleName" label="角色类型">
+          <template slot-scope="scope">
+            {{ scope.row.roleName || "-" }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createTime"
           label="创建时间"
@@ -44,14 +49,14 @@
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button
-              v-permission="'user:update'"
+              v-permission="'btn:user:system:profile:update'"
               size="mini"
               @click="editUser(scope.row)"
             >
               编辑
             </el-button>
             <el-button
-              v-permission="'user:delete'"
+              v-permission="'btn:user:system:profile:delete'"
               size="mini"
               type="danger"
               @click="deleteUser(scope.row)"
@@ -79,7 +84,12 @@
 
     <!-- 新增/编辑用户对话框 -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="500px">
-      <el-form :model="userForm" :rules="userRules" ref="userForm">
+      <el-form
+        :model="userForm"
+        :rules="userRules"
+        ref="userForm"
+        label-position="left"
+      >
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userForm.username" :disabled="isEdit"></el-input>
         </el-form-item>
@@ -91,6 +101,20 @@
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="userForm.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="roleId" label-position="top">
+          <el-select
+            v-model="userForm.roleId"
+            placeholder="请选择角色"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="role in roleList"
+              :key="role.id"
+              :label="role.roleName"
+              :value="role.id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item v-if="!isEdit" label="密码" prop="password">
           <el-input v-model="userForm.password" type="password"></el-input>
@@ -105,7 +129,13 @@
 </template>
 
 <script>
-import { createUser, deleteUser, getUserList, updateUser } from "@/api/user";
+import {
+  createUser,
+  deleteUser,
+  getUserList,
+  updateUser,
+  getAllRoles,
+} from "@/api/user";
 
 export default {
   name: "UserManagement",
@@ -132,6 +162,8 @@ export default {
         phone: "",
         password: "",
       },
+      // 角色列表
+      roleList: [],
       userRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
@@ -159,6 +191,7 @@ export default {
   },
   created() {
     this.fetchUserList();
+    this.fetchRoleList();
   },
   methods: {
     // 获取用户列表
@@ -183,7 +216,15 @@ export default {
         this.loading = false;
       }
     },
-
+    async fetchRoleList() {
+      try {
+        // 调用获取角色列表的API
+        const response = await getAllRoles();
+        this.roleList = response.data;
+      } catch (error) {
+        this.$message.error("获取角色列表失败: " + (error.message || ""));
+      }
+    },
     // 搜索用户
     searchUsers() {
       this.pagination.currentPage = 1;
@@ -219,6 +260,7 @@ export default {
         email: "",
         phone: "",
         password: "",
+        roleId: "",
       };
       this.dialogVisible = true;
     },
@@ -230,6 +272,12 @@ export default {
       this.userForm = { ...user };
       // 清空密码字段，编辑时不需要输入密码
       this.userForm.password = "";
+      // 确保 roleId 存在
+      if (this.userForm.roleId) {
+        this.userForm.roleId = Number(this.userForm.roleId);
+      } else {
+        this.userForm.roleId = "";
+      }
       this.dialogVisible = true;
     },
 
