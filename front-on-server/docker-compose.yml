@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  # # 定义名为 frontend 的服务
+  frontend:
+    # ./frontend - 从 ./frontend 目录下的 Dockerfile 构建镜像
+    build: ./frontend
+    # 容器运行时命名为 "frontend"
+    container_name: frontend
+    # 将宿主机 8888 端口映射到容器 80 端口
+    ports:
+      - "8888:80"
+    # 将容器连接到名为 "backend" 的网络
+    networks:
+      - backend
+
+networks:
+  # 网络名称
+  backend:
+    # 实际网络名称
+    name: backend-net
+    # 表示这是一个外部网络，需要预先创建
+    external: true
+# 启动：docker compose up -d --build
