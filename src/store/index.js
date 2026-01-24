@@ -75,6 +75,10 @@ export default new Vuex.Store({
       try {
         // 登录获取token
         const res = await loginApi({ username, password });
+        // 登录失败，抛错
+        if (res.code !== "200") {
+          throw new Error(res.message || "登录失败");
+        }
         commit("setToken", res.data);
         // 登录成功后获取用户信息
         const userInfo = await getUserInfo();
