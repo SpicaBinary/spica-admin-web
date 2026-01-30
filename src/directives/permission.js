@@ -29,7 +29,7 @@ function checkPermission(el, binding) {
   const { value } = binding;
   console.log("权限检查" + value);
   if (value) {
-    const hasPermission = store.getters.hasPermission(value);
+    const hasPermission = store.getters["user/hasPermission"](value);
     console.log("权限检查结果：" + hasPermission);
     if (!hasPermission) {
       // 使用 display 控制隐藏指令修饰el
@@ -45,7 +45,7 @@ function checkRole(el, binding) {
   const { value } = binding;
 
   if (value) {
-    const hasRole = store.getters.hasRole(value);
+    const hasRole = store.getters["user/hasRole"](value);
     // el.style.display = hasRole ? "" : "none";
     if (!hasRole) {
       // 使用 display 控制隐藏指令修饰el

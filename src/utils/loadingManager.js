@@ -27,7 +27,7 @@ function startLoading() {
         background: "rgba(0, 0, 0, 0.3)",
       });
       // 更新 Vuex 中的 loading 状态
-      store.commit("setLoading", true);
+      store.commit("user/setLoading", true);
     }, DELAY);
   }
   // 增加请求数量计数
@@ -51,7 +51,7 @@ function stopLoading() {
       loadingInstance = null;
     }
     // 更新 Vuex 中的 loading 状态
-    store.commit("setLoading", false);
+    store.commit("user/setLoading", false);
   }
 }
 

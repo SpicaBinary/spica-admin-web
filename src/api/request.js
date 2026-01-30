@@ -24,7 +24,7 @@ service.interceptors.request.use(
       loadingManager.show();
     }
     // 从Vuex 获取 token
-    const token = store.state.token;
+    const token = store.state.user.token;
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -86,7 +86,7 @@ service.interceptors.response.use(
             duration: 3000,
           });
           // 调用Vuex的logout action,清除本地存储的token和用户信息
-          store.dispatch("logout", true);
+          store.dispatch("user/logout", true);
           // 跳转到登录页面
           router.push("/login");
           break;

@@ -26,12 +26,12 @@ export default {
   computed: {
     // 从 Vuex 中获取用户信息
     userInfo() {
-      return this.$store.getters.userInfo;
+      return this.$store.getters['user/userInfo'];
     },
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout");
+      this.$store.dispatch("user/logout");
       this.$router.push("/login");
     },
     toUseManage() {

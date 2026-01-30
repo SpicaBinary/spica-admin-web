@@ -47,7 +47,7 @@ export default {
     async handleLogin() {
       try {
         // 调用 Vuex 的 login action
-        await this.$store.dispatch("login", {
+        await this.$store.dispatch("user/login", {
           username: this.username,
           password: this.password,
         });

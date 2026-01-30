@@ -139,7 +139,7 @@ export default {
 
     loadProfile() {
       // 从 store 获取用户信息
-      const userInfo = this.$store.getters.userInfo;
+      const userInfo = this.$store.getters["user/userInfo"];
       if (userInfo) {
         this.profileForm = {
           username: userInfo.username,
@@ -160,7 +160,7 @@ export default {
             this.$message.success("个人信息更新成功");
             const userInfo = await getUserInfo();
             // 更新 Vuex 中的用户信息
-            this.$store.commit("setUserInfo", userInfo.data);
+            this.$store.commit("user/setUserInfo", userInfo.data);
           } catch (error) {
             this.$message.error("更新失败: " + (error.message || "未知错误"));
           } finally {

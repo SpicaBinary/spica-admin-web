@@ -56,7 +56,7 @@ export default {
     // 从 Vuex 读取菜单数据
     menus() {
       // 用户当前的菜单
-      const list = this.$store.getters.userMenus || [];
+      const list = this.$store.getters['user/userMenus'] || [];
       return list;
     },
 
