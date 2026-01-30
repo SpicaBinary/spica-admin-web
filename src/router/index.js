@@ -34,6 +34,7 @@ const routes = [
         path: "", // 默认子路由，访问 / 时显示
         name: "Dashboard",
         component: Dashboard, // 这个组件会在 Layout 的 <router-view> 中显示
+        meta: { title: "首页", requiresAuth: true, affix: true }, // affix固定标签
       },
       {
         path: "profile",
@@ -45,32 +46,32 @@ const routes = [
         path: "order",
         name: "OrderManagement",
         component: OrderManagement,
-        meta: { requiresAuth: true },
+        meta: { title: "订单管理", requiresAuth: true },
       },
       // 系统管理模块
       {
         path: "system/user",
         name: "UserManagement",
         component: UserManagement,
-        meta: { requiresAuth: true },
+        meta: { title: "用户管理", requiresAuth: true },
       },
       {
         path: "system/menu",
         name: "MenuManagement",
         component: MenuManagement,
-        meta: { requiresAuth: true },
+        meta: { title: "菜单管理", requiresAuth: true },
       },
       {
         path: "system/profile",
         name: "profile",
         component: Profile,
-        meta: { requiresAuth: true },
+        meta: { title: "个人中心", requiresAuth: true },
       },
       {
         path: "system/permissionsAssign",
         name: "permissionsAssign",
         component: PermissionsAssign,
-        meta: { requiresAuth: true },
+        meta: { title: "权限分配", requiresAuth: true },
       },
     ],
   },
@@ -91,7 +92,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
   // 登录状态：从Vuex 获取是否有token来判断
-  const isLoggedIn = store.getters.isLoggedIn;
+  const isLoggedIn = store.getters["user/isLoggedIn"];
 
   if (requiresAuth && !isLoggedIn) {
     // 没登录想访问受保护页面，跳转到 /login
@@ -100,6 +101,15 @@ router.beforeEach((to, from, next) => {
   } else {
     // 其他情况直接放行
     next();
+  }
+});
+
+// 全局路由后置钩子：路由跳转完成后执行
+router.afterEach((to) => {
+  // 排除登录页 - 不在登录页显示标签页
+  if (to.path !== "/login") {
+    // 每次路由跳转成功后，将当前路由信息添加到标签页状态中
+    store.commit("tabs/ADD_VIEW", to);
   }
 });
 

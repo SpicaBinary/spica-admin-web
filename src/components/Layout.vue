@@ -23,6 +23,9 @@
         </div>
       </el-header>
 
+      <!-- 标签页视图区域 -->
+      <TabsView />
+
       <!-- 内容区域 -->
       <el-main class="app-main">
         <router-view />
@@ -33,18 +36,20 @@
 
 <script>
 import Sidebar from "./Sidebar.vue";
+// 引入 TabsView 组件
+import TabsView from "./TabsView.vue";
 
 export default {
   name: "Layout",
-  components: { Sidebar },
+  components: { Sidebar, TabsView },
   computed: {
     userInfo() {
-      return this.$store.getters.userInfo;
+      return this.$store.getters["user/userInfo"];
     },
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout");
+      this.$store.dispatch("user/logout");
       this.$router.push("/login");
     },
   },
