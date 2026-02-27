@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  name: "Sidebar",
+  name: "BaseSidebar",
   computed: {
     // 从 Vuex 读取菜单数据
     menus() {

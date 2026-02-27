@@ -1,7 +1,7 @@
 <template>
   <div class="app-wrapper">
     <!-- 引入独立的菜单组件 -->
-    <Sidebar />
+    <BaseSidebar />
 
     <!-- 主体区域 -->
     <div class="main-container">
@@ -35,13 +35,13 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar.vue";
+import BaseSidebar from "./BaseSidebar.vue";
 // 引入 TabsView 组件
 import TabsView from "./TabsView.vue";
 
 export default {
-  name: "Layout",
-  components: { Sidebar, TabsView },
+  name: "BaseLayout",
+  components: { BaseSidebar, TabsView },
   computed: {
     userInfo() {
       return this.$store.getters["user/userInfo"];

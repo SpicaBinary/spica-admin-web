@@ -3,7 +3,7 @@ import Router from "vue-router";
 // 引入 Vuex
 import store from "@/store";
 // 引入布局组件
-import Layout from "@/components/Layout.vue";
+import BaseLayout from "@/components/BaseLayout.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Login from "@/views/Login.vue";
 import MenuManagement from "@/views/MenuManagement.vue";
@@ -26,14 +26,14 @@ const routes = [
   // 主布局 - 包含公共布局的页面组
   {
     path: "/", // 根路径
-    component: Layout, // 布局组件（包含顶边栏和侧边栏）
+    component: BaseLayout, // 布局组件（包含顶边栏和侧边栏）
     meta: { requiresAuth: true }, // 需要登录才能访问
     children: [
-      // 嵌套路由 - 这些页面都会在 Layout 中显示
+      // 嵌套路由 - 这些页面都会在 BaseLayout 中显示
       {
         path: "", // 默认子路由，访问 / 时显示
         name: "Dashboard",
-        component: Dashboard, // 这个组件会在 Layout 的 <router-view> 中显示
+        component: Dashboard, // 这个组件会在 BaseLayout 的 <router-view> 中显示
         meta: { title: "首页", requiresAuth: true, affix: true }, // affix固定标签
       },
       {
