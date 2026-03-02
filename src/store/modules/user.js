@@ -1,9 +1,5 @@
 import { loginApi, logoutApi } from "@/api/auth";
 import { getCurrentUserMenus, getUserInfo } from "@/api/user";
-import Vue from "vue";
-import Vuex from "vuex";
-
-Vue.use(Vuex);
 
 // 页面刷新时从 localStorage 里恢复用户状态
 const savedToken = localStorage.getItem("token");
