@@ -34,44 +34,63 @@ const routes = [
         path: "", // 默认子路由，访问 / 时显示
         name: "Dashboard",
         component: Dashboard, // 这个组件会在 BaseLayout 的 <router-view> 中显示
-        meta: { title: "首页", requiresAuth: true, affix: true }, // affix固定标签
-      },
-      {
-        path: "profile",
-        name: "Profile",
-        component: Profile,
-        meta: { requiresAuth: true },
+        meta: { title: "首页", requiresAuth: true, affix: true, cache: true }, // affix固定标签,cache缓存标签
       },
       {
         path: "order",
         name: "OrderManagement",
         component: OrderManagement,
-        meta: { title: "订单管理", requiresAuth: true },
+        meta: {
+          title: "订单管理",
+          requiresAuth: true,
+          affix: false,
+          cache: true,
+        },
       },
       // 系统管理模块
       {
         path: "system/user",
         name: "UserManagement",
         component: UserManagement,
-        meta: { title: "用户管理", requiresAuth: true },
+        meta: {
+          title: "用户管理",
+          requiresAuth: true,
+          affix: false,
+          cache: true,
+        },
       },
       {
         path: "system/menu",
         name: "MenuManagement",
         component: MenuManagement,
-        meta: { title: "菜单管理", requiresAuth: true },
+        meta: {
+          title: "菜单管理",
+          requiresAuth: true,
+          affix: false,
+          cache: true,
+        },
       },
       {
         path: "system/profile",
-        name: "profile",
+        name: "Profile",
         component: Profile,
-        meta: { title: "个人中心", requiresAuth: true },
+        meta: {
+          title: "个人中心",
+          requiresAuth: true,
+          affix: false,
+          cache: true,
+        },
       },
       {
         path: "system/permissionsAssign",
-        name: "permissionsAssign",
+        name: "PermissionsAssign",
         component: PermissionsAssign,
-        meta: { title: "权限分配", requiresAuth: true },
+        meta: {
+          title: "权限分配",
+          requiresAuth: true,
+          affix: false,
+          cache: true,
+        },
       },
     ],
   },
@@ -109,7 +128,7 @@ router.afterEach((to) => {
   // 排除登录页 - 不在登录页显示标签页
   if (to.path !== "/login") {
     // 每次路由跳转成功后，将当前路由信息添加到标签页状态中
-    store.commit("tabs/ADD_VIEW", to);
+    store.commit("tags/ADD_VIEW", to);
   }
 });
 

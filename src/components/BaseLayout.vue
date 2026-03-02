@@ -24,11 +24,13 @@
       </el-header>
 
       <!-- 标签页视图区域 -->
-      <TabsView />
+      <TagsView />
 
       <!-- 内容区域 -->
       <el-main class="app-main">
-        <router-view />
+        <keep-alive :include="cachedViews">
+          <router-view />
+        </keep-alive>
       </el-main>
     </div>
   </div>
@@ -36,20 +38,31 @@
 
 <script>
 import BaseSidebar from "./BaseSidebar.vue";
-// 引入 TabsView 组件
-import TabsView from "./TabsView.vue";
+// 引入 TagsView 组件
+import TagsView from "./TagsView.vue";
 
 export default {
   name: "BaseLayout",
-  components: { BaseSidebar, TabsView },
+  components: { BaseSidebar, TagsView },
   computed: {
     userInfo() {
       return this.$store.getters["user/userInfo"];
+    },
+    // 需要缓存的组件名称列表
+    cachedViews() {
+      return this.$store.getters["tags/cachedViews"];
+    },
+    // 使用路由路径作为key，确保路由变化时重新渲染
+    key() {
+      return this.$route.path;
     },
   },
   methods: {
     logout() {
       this.$store.dispatch("user/logout");
+      // 清除所有缓存页面TAGS
+      this.$store.commit("tags/REMOVE_VIEW_ALL");
+      // 页面跳转login
       this.$router.push("/login");
     },
   },

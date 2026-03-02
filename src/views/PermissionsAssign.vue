@@ -64,7 +64,7 @@ import {
   assignRolePermissions,
 } from "@/api/user";
 export default {
-  name: "RolePermissionAssign",
+  name: "PermissionsAssign",
   data() {
     return {
       roles: [], // 所有角色
@@ -180,10 +180,10 @@ export default {
         node.label = `[${node.type}]-${node.label || node.name || ""}`;
         // 生成唯一 key
         node.key = `${node.type}-${node.id}`;
-        console.log(node.key);
+        // console.log(node.key);
         if (node.children && node.children.length > 0) {
           node.children = this.transformTree(node.children);
-          console.log(node.children);
+          // console.log(node.children);
         }
         return node;
       });

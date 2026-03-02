@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 // 标签页管理模块
-import tabs from "./modules/tabs";
+import tags from "./modules/tags";
 // 用户信息管理模块
 import user from "./modules/user";
 
@@ -14,6 +14,6 @@ export default new Vuex.Store({
   modules: {
     // 所有user的commit/dispatch都要加命名空间，如： this.$store.dispatch("user/logout");
     user,
-    tabs,
+    tags,
   },
 });

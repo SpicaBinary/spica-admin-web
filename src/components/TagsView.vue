@@ -16,10 +16,10 @@
 </template>
 <script>
 export default {
-  name: "TabsView",
+  name: "TagsView",
   computed: {
     visitedViews() {
-      return this.$store.getters["tabs/visitedViews"];
+      return this.$store.getters["tags/visitedViews"];
     },
   },
   methods: {
@@ -32,7 +32,7 @@ export default {
       const views = this.visitedViews;
       const index = views.findIndex((v) => v.path === path);
 
-      this.$store.commit("tabs/REMOVE_VIEW", path);
+      this.$store.commit("tags/REMOVE_VIEW", path);
 
       if (this.$route.path === path) {
         const next = views[index + 1] || views[index - 1];
