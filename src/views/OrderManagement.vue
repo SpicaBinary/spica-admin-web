@@ -100,10 +100,10 @@
         </el-form-item>
         <el-form-item label="订单状态" prop="status">
           <el-select v-model="orderForm.status" placeholder="请选择订单状态">
-            <el-option label="待支付" value="PENDING"></el-option>
-            <el-option label="已支付" value="PAID"></el-option>
-            <el-option label="已取消" value="CANCELLED"></el-option>
-            <el-option label="已完成" value="COMPLETED"></el-option>
+            <el-option label="待支付" value="0"></el-option>
+            <el-option label="已支付" value="1"></el-option>
+            <el-option label="已取消" value="2"></el-option>
+            <el-option label="已完成" value="3"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -251,7 +251,7 @@ export default {
             this.$message.error(
               (this.isEdit ? "更新" : "创建") +
                 "订单失败: " +
-                (error.message || "")
+                (error.message || ""),
             );
           }
         }
@@ -282,10 +282,10 @@ export default {
     // 获取订单状态文本
     getOrderStatusText(status) {
       const statusMap = {
-        PENDING: "待支付",
-        PAID: "已支付",
-        CANCELLED: "已取消",
-        COMPLETED: "已完成",
+        0: "待支付",
+        1: "已支付",
+        2: "已取消",
+        3: "已完成",
       };
       return statusMap[status] || status;
     },
