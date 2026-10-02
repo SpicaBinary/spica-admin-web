@@ -37,13 +37,19 @@ const routes = [
         meta: { title: "首页", requiresAuth: true, affix: true, cache: true }, // affix固定标签,cache缓存标签
       },
       {
+        path: "Profile",
+        name: "Profile",
+        component: Profile,
+        meta: { requiresAuth: true, affix: true, cache: true },
+      },
+      {
         path: "order",
         name: "OrderManagement",
         component: OrderManagement,
         meta: {
           title: "订单管理",
           requiresAuth: true,
-          affix: false,
+          affix: true,
           cache: true,
         },
       },
@@ -55,7 +61,7 @@ const routes = [
         meta: {
           title: "用户管理",
           requiresAuth: true,
-          affix: false,
+          affix: true,
           cache: true,
         },
       },
@@ -66,7 +72,7 @@ const routes = [
         meta: {
           title: "菜单管理",
           requiresAuth: true,
-          affix: false,
+          affix: true,
           cache: true,
         },
       },
@@ -77,7 +83,7 @@ const routes = [
         meta: {
           title: "个人中心",
           requiresAuth: true,
-          affix: false,
+          affix: true,
           cache: true,
         },
       },
@@ -88,7 +94,7 @@ const routes = [
         meta: {
           title: "权限分配",
           requiresAuth: true,
-          affix: false,
+          affix: true,
           cache: true,
         },
       },
@@ -128,7 +134,7 @@ router.afterEach((to) => {
   // 排除登录页 - 不在登录页显示标签页
   if (to.path !== "/login") {
     // 每次路由跳转成功后，将当前路由信息添加到标签页状态中
-    store.commit("tags/ADD_VIEW", to);
+    store.commit("tabs/ADD_VIEW", to);
   }
 });
 

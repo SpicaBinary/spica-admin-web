@@ -49,7 +49,7 @@ function checkRole(el, binding) {
     // el.style.display = hasRole ? "" : "none";
     if (!hasRole) {
       // 使用 display 控制隐藏指令修饰el
-      el.style.display = hasRole ? "" : "none";
+      el.style.display = hasPermission ? "" : "none";
       // 从 DOM 中直接移除
       // el.parentNode && el.parentNode.removeChild(el);
     }

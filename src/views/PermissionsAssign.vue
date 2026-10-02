@@ -97,7 +97,7 @@ export default {
     filterRoles() {
       const key = this.roleKeyword.toLowerCase();
       this.filteredRoles = this.roles.filter((r) =>
-        r.roleName.toLowerCase().includes(key)
+        r.roleName.toLowerCase().includes(key),
       );
     },
 

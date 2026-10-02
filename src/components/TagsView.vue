@@ -8,7 +8,7 @@
       @click="go(item.path)"
     >
       <span class="tab-title">{{ item.title }}</span>
-      <span v-if="!item.affix" class="tab-close" @click.stop="close(item.path)">
+      <span v-if="item.affix" class="tab-close" @click.stop="close(item.path)">
         ×
       </span>
     </div>
@@ -16,10 +16,10 @@
 </template>
 <script>
 export default {
-  name: "TagsView",
+  name: "TabsView",
   computed: {
     visitedViews() {
-      return this.$store.getters["tags/visitedViews"];
+      return this.$store.getters["tabs/visitedViews"];
     },
   },
   methods: {
@@ -32,7 +32,7 @@ export default {
       const views = this.visitedViews;
       const index = views.findIndex((v) => v.path === path);
 
-      this.$store.commit("tags/REMOVE_VIEW", path);
+      this.$store.commit("tabs/REMOVE_VIEW", path);
 
       if (this.$route.path === path) {
         const next = views[index + 1] || views[index - 1];

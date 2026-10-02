@@ -1,14 +1,10 @@
 // 这是一个 Vuex 模块，用于管理页面标签（类似浏览器标签页的功能）
-
-// 页面刷新时从 localStorage 里恢复tab状态
-const savedState = JSON.parse(localStorage.getItem("tagsView") || "{}");
-
 // 定义状态（state）- 存储应用的数据
 const state = {
   // 用来存储用户访问过的页面信息的数组
-  visitedViews: savedState.visitedViews || [],
+  visitedViews: [],
   // 存储需要缓存的组件名称
-  cachedViews: savedState.cachedViews || [],
+  cachedViews: [],
 };
 
 // 定义状态变更的方法（mutations）- 同步修改状态
@@ -33,14 +29,6 @@ const mutations = {
         state.cachedViews.push(view.name);
       }
     }
-    // 保存到 localStorage
-    localStorage.setItem(
-      "tagsView",
-      JSON.stringify({
-        visitedViews: state.visitedViews,
-        cachedViews: state.cachedViews,
-      }),
-    );
   },
 
   // 从 visitedViews 数组中移除指定路径的标签页
@@ -63,20 +51,6 @@ const mutations = {
         state.cachedViews.splice(index, 1);
       }
     }
-    // 保存到 localStorage
-    localStorage.setItem(
-      "tagsView",
-      JSON.stringify({
-        visitedViews: state.visitedViews,
-        cachedViews: state.cachedViews,
-      }),
-    );
-  },
-  // 清除所有标签页
-  REMOVE_VIEW_ALL(state) {
-    state.visitedViews = [];
-    state.cachedViews = [];
-    localStorage.removeItem("tagsView");
   },
 };
 
