@@ -1,6 +1,6 @@
 # spica-admin-web
 
-IdeaSpace 管理台前端 —— Vue 2 + Element UI 的后台管理系统，与配套后端 [`spica-admin-server`](https://github.com/SpicaBinary/spica-admin-server)（Spring Cloud Alibaba 微服务）对接，实现登录认证、RBAC 动态权限、菜单管理等完整管理台能力。
+Vue 2 + Element UI 后台管理系统，与配套后端 [`spica-admin-server`](https://github.com/SpicaBinary/spica-admin-server)（Spring Cloud Alibaba 微服务）对接，实现登录认证、RBAC 动态权限、菜单管理等完整管理台能力。
 
 ## 技术栈
 
