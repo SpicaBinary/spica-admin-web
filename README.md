@@ -26,7 +26,7 @@ Vue 2 + Element UI 后台管理系统，与配套后端 [`spica-admin-server`](h
 ## 目录结构
 
 ```
-frontend-vue2/
+spica-admin-web/
 ├── public/                 # 静态入口
 ├── src/
 │   ├── api/                # auth / user / order 接口封装（request.js 统一拦截）
